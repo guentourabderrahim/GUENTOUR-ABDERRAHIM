@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GUENTOUR ABDERRAHIM</title>
+
+  <!-- Tailwind CSS CDN with custom config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome Icons 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <!-- SweetAlert2 for modern modals and alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200 flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- ========================================================================= -->
+  <!-- 1. AUTHENTICATION GATEKEEPER SCREEN (Strict Gate: No other page displays) -->
+  <!-- ========================================================================= -->
+  <section id="auth-gatekeeper-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 overflow-y-auto">
+    <!-- Ambient glowing backdrop blobs -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+      <!-- Brand Logo / Title Header -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 text-white text-2xl shadow-lg shadow-indigo-500/25 mb-4">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold brand-title tracking-tight uppercase">
+          GUENTOUR ABDERRAHIM
+        </h1>
+        <p class="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-1">
+          2nd Year Computer Science Academic Portal
+        </p>
+      </div>
+
+      <!-- STEP 1: Registration / Login Information -->
+      <div id="auth-step-1">
+        <div class="mb-5 text-center">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white">Sign In to Continue</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            Enter your details below. A verification code will be sent to confirm your identity.
+          </p>
+        </div>
+
+        <form id="auth-info-form" class="space-y-4" onsubmit="return false;">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5" for="auth-first-name">
+              First Name
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 text-sm">
+                <i class="fas fa-user"></i>
+              </span>
+              <input type="text" id="auth-first-name" required placeholder="e.g. John" 
+                     class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5" for="auth-last-name">
+              Last Name
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 text-sm">
+                <i class="fas fa-user-tag"></i>
+              </span>
+              <input type="text" id="auth-last-name" required placeholder="e.g. Doe" 
+                     class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5" for="auth-email">
+              Email Address
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 text-sm">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <input type="email" id="auth-email" required placeholder="name@student.univ.edu" 
+                     class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+          </div>
+
+          <button id="btn-send-code" type="button" 
+                  class="w-full mt-2 py-3 px-4 rounded-xl font-bold text-sm text-white bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+            <span>Send Verification Code</span>
+            <i class="fas fa-arrow-right text-xs"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- STEP 2: Verification Code Input (Shown after Send Code) -->
+      <div id="auth-step-2" class="hidden">
+        <div class="mb-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl mx-auto mb-2">
+            <i class="fas fa-shield-check"></i>
+          </div>
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white">Verify Your Code</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            We sent a 6-digit verification code to <br>
+            <span id="display-target-email" class="font-bold text-indigo-500"></span>
+          </p>
+        </div>
+
+        <!-- Demonstration & Testing Helper Box -->
+        <div class="mb-5 p-3 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-800/50 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 dark:text-slate-400">Your Generated Code:</span>
+            <span id="simulation-code-badge" class="font-mono font-extrabold text-sm text-indigo-600 dark:text-indigo-400 tracking-wider"></span>
+          </div>
+          <button id="btn-autofill-otp" type="button" class="w-full mt-2 text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline text-center">
+            Click here to auto-fill this code
+          </button>
+        </div>
+
+        <form id="auth-code-form" class="space-y-4" onsubmit="return false;">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5" for="auth-otp-input">
+              6-Digit Verification Code
+            </label>
+            <input type="text" id="auth-otp-input" maxlength="6" placeholder="• • • • • •" 
+                   class="w-full py-3 px-4 text-center font-mono font-bold tracking-widest text-xl rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+          </div>
+
+          <button id="btn-verify-code" type="button" 
+                  class="w-full py-3 px-4 rounded-xl font-bold text-sm text-white bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
+            <i class="fas fa-check"></i>
+            <span>Verify & Enter Portal</span>
+          </button>
+
+          <div class="flex items-center justify-between pt-2 text-xs">
+            <button id="btn-back-to-info" type="button" class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+              <i class="fas fa-arrow-left mr-1"></i> Edit details
+            </button>
+            <button id="btn-resend-code" type="button" class="text-indigo-600 dark:text-indigo-400 font-semibold disabled:opacity-50">
+              Resend Code <span id="resend-timer-text"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN APPLICATION CONTENT (Appears strictly after successful login)    -->
+  <!-- ========================================================================= -->
+  <div id="main-portal-content" class="hidden flex-1 flex flex-col min-h-screen">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        
+        <!-- Left: Branding (English Only, "GUENTOUR ABDERRAHIM") -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-500 text-white flex items-center justify-center text-lg shadow-md shrink-0">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <div>
+            <h1 class="text-base sm:text-lg font-extrabold brand-title leading-tight tracking-tight uppercase">
+              GUENTOUR ABDERRAHIM
+            </h1>
+            <span class="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+              2nd Year Computer Science
+            </span>
+          </div>
+        </div>
+
+        <!-- Center: Desktop Navigation Tabs -->
+        <nav class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200/80 dark:border-slate-700/60 text-xs">
+          <button data-target-tab="courses" 
+                  class="nav-tab-button px-3.5 py-1.5 rounded-lg flex items-center gap-2 transition font-medium">
+            <i class="fas fa-book-bookmark"></i>
+            <span>Courses & Resources</span>
+          </button>
+          <button data-target-tab="chat" 
+                  class="nav-tab-button px-3.5 py-1.5 rounded-lg flex items-center gap-2 transition font-medium relative">
+            <i class="fas fa-comments"></i>
+            <span>Student Lounge</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          </button>
+          <button id="nav-tab-admin" data-target-tab="admin" 
+                  class="nav-tab-button px-3.5 py-1.5 rounded-lg flex items-center gap-2 transition font-medium hidden">
+            <i class="fas fa-shield-halved text-amber-500"></i>
+            <span>Owner Control</span>
+          </button>
+        </nav>
+
+        <!-- Right: Actions (Upload Resource, Theme Toggle, User Menu) -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Quick Add Resource Button -->
+          <button class="btn-open-upload px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-sm flex items-center gap-1.5">
+            <i class="fas fa-cloud-arrow-up"></i>
+            <span class="hidden sm:inline">Upload Resource</span>
+            <span class="sm:hidden">Upload</span>
+          </button>
+
+          <!-- Theme Toggle -->
+          <button class="btn-toggle-theme p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition" 
+                  title="Toggle Light / Dark Mode">
+            <i class="fas fa-sun text-amber-400 theme-toggle-icon"></i>
+          </button>
+
+          <!-- User Profile & Dropdown -->
+          <div class="relative group">
+            <button class="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-bold text-xs flex items-center justify-center user-initials-display">
+                ST
+              </div>
+              <div class="hidden lg:block text-left text-xs pr-1">
+                <span class="font-bold block text-slate-800 dark:text-slate-100 user-name-display truncate max-w-[120px]">Student</span>
+                <span class="text-[10px] text-slate-400">Logged in</span>
+              </div>
+              <i class="fas fa-chevron-down text-[10px] text-slate-400 hidden lg:block"></i>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div class="absolute right-0 mt-1 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-2 hidden group-hover:block transition-all z-50">
+              <div class="px-3 py-2 border-b border-slate-100 dark:border-slate-800 mb-1">
+                <p class="text-xs font-bold text-slate-800 dark:text-slate-200 user-name-display">Student</p>
+                <p class="text-[11px] text-slate-400 truncate user-email-display">email@student.edu</p>
+              </div>
+
+              <!-- Owner Admin Panel Unlock option -->
+              <button class="btn-open-admin-panel w-full text-left px-3 py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 transition flex items-center gap-2">
+                <i class="fas fa-shield-halved text-amber-500"></i>
+                <span>Owner Admin Panel</span>
+              </button>
+
+              <button class="btn-logout w-full text-left px-3 py-2 rounded-xl text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition flex items-center gap-2">
+                <i class="fas fa-arrow-right-from-bracket"></i>
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mobile Hamburger Menu Button -->
+          <button id="btn-mobile-menu" class="md:hidden p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i class="fas fa-bars text-lg"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-drawer-backdrop" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm transition-opacity"></div>
+    <div id="mobile-nav-drawer" class="fixed top-0 right-0 bottom-0 w-72 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 z-50 transform translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-800">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <span class="font-bold text-sm brand-title">GUENTOUR ABDERRAHIM</span>
+          </div>
+          <button id="btn-close-mobile-drawer" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white">
+            <i class="fas fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <div class="mt-6 space-y-2">
+          <button data-target-tab="courses" class="nav-tab-button w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3">
+            <i class="fas fa-book-bookmark text-indigo-500"></i>
+            <span>Courses & Resources</span>
+          </button>
+          <button data-target-tab="chat" class="nav-tab-button w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3">
+            <i class="fas fa-comments text-cyan-500"></i>
+            <span>Student Lounge</span>
+          </button>
+          <button class="btn-open-admin-panel w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 text-amber-500">
+            <i class="fas fa-shield-halved"></i>
+            <span>Owner Admin Panel</span>
+          </button>
+          <button class="btn-open-upload w-full mt-4 py-2.5 px-4 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition flex items-center justify-center gap-2">
+            <i class="fas fa-cloud-arrow-up"></i>
+            <span>Upload Resource</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-6 border-t border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white font-bold text-xs flex items-center justify-center user-initials-display">
+            ST
+          </div>
+          <div class="min-w-0">
+            <p class="text-xs font-bold text-slate-800 dark:text-slate-100 truncate user-name-display">Student</p>
+            <p class="text-[10px] text-slate-400 truncate user-email-display">email@student.edu</p>
+          </div>
+        </div>
+        <button class="btn-logout w-full py-2 px-3 rounded-xl text-xs font-semibold text-rose-600 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 transition flex items-center justify-center gap-2">
+          <i class="fas fa-arrow-right-from-bracket"></i>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Views Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+      <!-- ================================================================= -->
+      <!-- VIEW 1: COURSES & RESOURCES (The 7 Modules)                       -->
+      <!-- ================================================================= -->
+      <section id="view-courses-section">
+        
+        <!-- Controls & Filter Toolbar -->
+        <div class="mb-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+          <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            
+            <!-- Search Bar -->
+            <div class="relative flex-1">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 text-sm">
+                <i class="fas fa-magnifying-glass"></i>
+              </span>
+              <input type="text" id="search-resources-input" placeholder="Search exams, TD/TP, lectures by title or keyword..." 
+                     class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+
+            <!-- Subject Select Filter -->
+            <div class="flex items-center gap-2">
+              <label for="filter-subject-select" class="text-xs font-bold text-slate-500 whitespace-nowrap hidden sm:inline">Module:</label>
+              <select id="filter-subject-select" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="all">All 7 Modules</option>
+                <option value="ads3">Algorithms and data structure 3</option>
+                <option value="arch">computer architecture</option>
+                <option value="oop1">Object Oriented programming 1</option>
+                <option value="is">information systems</option>
+                <option value="prob">probability and statistics</option>
+                <option value="num">numerical methods</option>
+                <option value="mgt">Business Management</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Category Filter Pills & Global Summary -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+            <div class="flex flex-wrap items-center gap-1.5 text-xs">
+              <button data-category="all" class="filter-category-btn px-3 py-1.5 rounded-lg font-semibold bg-indigo-600 text-white shadow-sm transition">
+                All Resources (<span id="stat-total-resources">0</span>)
+              </button>
+              <button data-category="lesson" class="filter-category-btn px-3 py-1.5 rounded-lg font-medium bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-500 transition">
+                <i class="fas fa-book-open mr-1 text-indigo-500"></i> Lessons (<span id="stat-total-lessons">0</span>)
+              </button>
+              <button data-category="assignment" class="filter-category-btn px-3 py-1.5 rounded-lg font-medium bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-amber-500 transition">
+                <i class="fas fa-pencil mr-1 text-amber-500"></i> Assignments / TD-TP (<span id="stat-total-assignments">0</span>)
+              </button>
+              <button data-category="exam" class="filter-category-btn px-3 py-1.5 rounded-lg font-medium bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-rose-500 transition">
+                <i class="fas fa-file-signature mr-1 text-rose-500"></i> Exams (<span id="stat-total-exams">0</span>)
+              </button>
+            </div>
+
+            <div class="text-[11px] text-slate-400">
+              <i class="fas fa-circle-info mr-1 text-indigo-400"></i> Any student can upload exams, assignments, or notes.
+            </div>
+          </div>
+        </div>
+
+        <!-- The 7 Course Modules Grid -->
+        <div id="modules-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Dynamically populated by js/modules.js -->
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 2: STUDENT GROUP CHAT (Discussion Forum)                     -->
+      <!-- ================================================================= -->
+      <section id="view-chat-section" class="hidden">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden flex flex-col h-[75vh]">
+          
+          <!-- Chat Header -->
+          <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 flex items-center justify-center text-lg">
+                <i class="fas fa-comments"></i>
+              </div>
+              <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span>Student Study Lounge</span>
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                </h2>
+                <p class="text-xs text-slate-400">
+                  Discuss 2nd Year Computer Science courses, exercises, and exam preparation in real-time.
+                </p>
+              </div>
+            </div>
+
+            <!-- Chat Topic Tag Pills -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+              <button data-tag="all" class="chat-filter-tag px-2.5 py-1 rounded-lg font-semibold bg-indigo-600 text-white transition">
+                All Topics
+              </button>
+              <button data-tag="General" class="chat-filter-tag px-2.5 py-1 rounded-lg font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition">
+                General
+              </button>
+              <button data-tag="ADS 3" class="chat-filter-tag px-2.5 py-1 rounded-lg font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition">
+                ADS 3
+              </button>
+              <button data-tag="OOP 1" class="chat-filter-tag px-2.5 py-1 rounded-lg font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition">
+                OOP 1
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages Stream Container -->
+          <div id="chat-messages-list" class="flex-1 min-h-0 p-4 sm:p-6 overflow-y-auto space-y-4 custom-scrollbar bg-slate-50/20 dark:bg-slate-950/20">
+            <!-- Dynamically populated by js/chat.js -->
+          </div>
+
+          <!-- Chat Input Footer -->
+          <div class="p-3 sm:p-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shrink-0">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-[11px] font-bold text-slate-500">Topic:</span>
+              <select id="chat-tag-select" class="px-2.5 py-1 rounded-lg text-xs border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <textarea id="chat-input-message" rows="1" placeholder="Write your question, comment, or tip for other students... (Press Enter to send)"
+                        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();window.portalChat.handleSendMessage();}"
+                        class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none transition"></textarea>
+              <button id="btn-send-chat-msg" type="button" 
+                      onclick="window.portalChat.handleSendMessage()"
+                      class="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-indigo-600 hover:bg-indigo-700 active:scale-95 transition shadow-sm flex items-center gap-2 shrink-0 cursor-pointer">
+                <span>Send</span>
+                <i class="fas fa-paper-plane text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 3: OWNER EXCLUSIVE ADMIN CONTROL PANEL                       -->
+      <!-- ================================================================= -->
+      <section id="view-admin-section" class="hidden space-y-6">
+        
+        <!-- Header & Action Bar -->
+        <div class="bg-gradient-to-r from-amber-500/10 via-indigo-500/10 to-transparent border border-amber-500/20 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl">
+              <i class="fas fa-shield-halved"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white">Owner Master Control Panel</h2>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-black">EXCLUSIVE</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5">
+                Full authority to ban or remove users and moderate all platform content.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button id="btn-change-admin-pin" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-indigo-500 transition">
+              <i class="fas fa-key mr-1.5 text-indigo-400"></i> Change PIN
+            </button>
+            <button id="btn-exit-admin-mode" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-200 dark:border-rose-800/40 hover:bg-rose-600 hover:text-white transition">
+              <i class="fas fa-lock mr-1.5"></i> Lock Panel
+            </button>
+          </div>
+        </div>
+
+        <!-- Metrics Overview -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+            <span class="text-xs text-slate-400 font-medium">Registered Students</span>
+            <p id="admin-stat-total-users" class="text-2xl font-extrabold text-slate-800 dark:text-white mt-1">0</p>
+          </div>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+            <span class="text-xs text-emerald-500 font-medium">Active Accounts</span>
+            <p id="admin-stat-active-users" class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">0</p>
+          </div>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+            <span class="text-xs text-rose-500 font-medium">Suspended (Banned)</span>
+            <p id="admin-stat-banned-users" class="text-2xl font-extrabold text-rose-600 dark:text-rose-400 mt-1">0</p>
+          </div>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+            <span class="text-xs text-indigo-500 font-medium">Total Resources</span>
+            <p id="admin-stat-total-res" class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">0</p>
+          </div>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+            <span class="text-xs text-cyan-500 font-medium">Chat Messages</span>
+            <p id="admin-stat-total-msgs" class="text-2xl font-extrabold text-cyan-600 dark:text-cyan-400 mt-1">0</p>
+          </div>
+        </div>
+
+        <!-- Registered Users Management Table -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+          <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white">Student User Management</h3>
+              <p class="text-xs text-slate-400">Ban any user to immediately revoke portal access or remove them permanently.</p>
+            </div>
+            <button id="btn-refresh-admin-users" class="p-2 rounded-xl text-slate-400 hover:text-indigo-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Refresh Table">
+              <i class="fas fa-arrows-rotate text-sm"></i>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 dark:bg-slate-800/50 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                  <th class="py-3 px-4">Student</th>
+                  <th class="py-3 px-4">Joined & Activity</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4">Identifier</th>
+                  <th class="py-3 px-4 text-right">Moderation Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-table-body">
+                <!-- Dynamically populated by js/admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Resource Moderation List -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1">Uploaded Resources Moderation</h3>
+          <p class="text-xs text-slate-400 mb-4">You can remove any file uploaded by students across all 7 courses.</p>
+          
+          <div id="admin-resources-list" class="space-y-2 max-h-72 overflow-y-auto custom-scrollbar">
+            <!-- Dynamically populated by js/admin.js -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer: Clean, English-Only, STRICTLY NO BIO (Just the site title) -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900 py-6">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold tracking-tight text-slate-800 dark:text-slate-200 uppercase">GUENTOUR ABDERRAHIM</span>
+          <span>•</span>
+          <span>2nd Year Computer Science Academic Platform</span>
+        </div>
+        <div class="flex items-center gap-4 text-slate-400">
+          <span>All 7 Core Modules</span>
+          <span>•</span>
+          <span>Exams, TD/TP & Lectures Hub</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 3. RESOURCE UPLOAD MODAL (Accessible by any logged-in student)            -->
+  <!-- ========================================================================= -->
+  <div id="upload-resource-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl relative overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm font-bold">
+            <i class="fas fa-cloud-arrow-up"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Upload Course Resource</h3>
+            <p class="text-[11px] text-slate-400">Share exams, TD/TP exercises, or lectures</p>
+          </div>
+        </div>
+        <button id="btn-close-upload-modal" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white">
+          <i class="fas fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Upload Form -->
+      <form id="upload-resource-form" class="mt-4 space-y-4">
+        <!-- Target Module Selection -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5" for="upload-modal-subject">
+            Select Course / Module
+          </label>
+          <select id="upload-modal-subject" required 
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <!-- Populated from ACADEMIC_MODULES -->
+          </select>
+        </div>
+
+        <!-- Category (Exam / Assignment / Lesson) -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5" for="upload-modal-type">
+            Resource Category
+          </label>
+          <select id="upload-modal-type" required 
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="exam">📝 Exam / Test (Examen, Interrogation)</option>
+            <option value="assignment">📑 Assignment / Homework (TD / TP / Serie)</option>
+            <option value="lesson">📖 Lecture / Lesson (Cour / Resume / Chapitre)</option>
+          </select>
+        </div>
+
+        <!-- Resource Title -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5" for="upload-modal-title">
+            Resource Title
+          </label>
+          <input type="text" id="upload-modal-title" required placeholder="e.g. Midterm Exam 2024 with Solution" 
+                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <!-- Optional Notes -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5" for="upload-modal-notes">
+            Optional Notes / Description
+          </label>
+          <input type="text" id="upload-modal-notes" placeholder="e.g. Contains solutions to Exercise 1 & 2" 
+                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <!-- Drag & Drop Zone for ANY File Format (PDF, Images, etc.) -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+            File Attachment (PDF, Images, Documents, Archives, etc.)
+          </label>
+          <div id="upload-dropzone" 
+               class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-5 text-center cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-400 transition bg-slate-50/50 dark:bg-slate-800/30 relative">
+            <input type="file" id="upload-file-input" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+            <div class="pointer-events-none">
+              <i class="fas fa-file-arrow-up text-2xl text-indigo-500 mb-2"></i>
+              <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">
+                Click or drag file here to attach
+              </p>
+              <p class="text-[11px] text-slate-400 mt-0.5">
+                Supports PDF, PNG, JPG, DOCX, ZIP, and any file format
+              </p>
+              <div id="upload-file-preview-name" class="mt-2 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                No file selected
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" id="btn-cancel-upload" 
+                  class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            Cancel
+          </button>
+          <button type="submit" id="btn-submit-upload" 
+                  class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-md shadow-indigo-600/30 flex items-center gap-1.5">
+            <i class="fas fa-cloud-arrow-up"></i>
+            <span>Upload Resource</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/modules.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
